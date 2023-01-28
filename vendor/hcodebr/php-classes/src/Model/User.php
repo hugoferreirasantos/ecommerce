@@ -97,6 +97,97 @@ class User extends Model {
 
 	 //Fim: Método logout:
 
+	 //Inicio: Método listAll():
+	public static function listAll()
+	{
+
+		$sql = new Sql();
+
+		return $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) ORDER BY b.desperson");
+
+	}
+
+	 //Fim:: Método listAll():
+
+	 //Inicio: Método save:
+	public function save()
+	{
+
+		$sql = new Sql();
+
+		$results = $sql->select("CALL sp_users_save(:desperson,:deslogin,:despassword,:desemail,:nrphone,:inadmin)",
+			array(
+			":desperson"=>$this->getdesperson(),
+			":deslogin"=>$this->getdeslogin(),
+			":despassword"=>$this->getdespassword(),
+			":desemail"=>$this->getdesemail(),
+			":nrphone"=>$this->getnrphone(),
+			":inadmin"=>$this->getinadmin()
+		));
+
+		$this->setData($results[0]);
+
+
+	}
+	 //Fim: Método save:
+
+	 //Inicio: Método get():
+	public function get($iduser)
+	{
+
+		$sql = new Sql();
+
+		$results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser", 
+			array(
+				"iduser"=>$iduser
+		));
+
+		$this->setData($results[0]);
+
+	}
+
+	 //Fim: Método get();
+
+	 //Inicio: Método update():
+	public function update()
+	{
+
+		$sql = new Sql();
+
+		$results = $sql->select("CALL sp_usersupdate_save(:iduser,:desperson,:deslogin,:despassword,:desemail,:nrphone,:inadmin)",
+			array(
+			":iduser"=>$this->getiduser(),
+			":desperson"=>$this->getdesperson(),
+			":deslogin"=>$this->getdeslogin(),
+			":despassword"=>$this->getdespassword(),
+			":desemail"=>$this->getdesemail(),
+			":nrphone"=>$this->getnrphone(),
+			":inadmin"=>$this->getinadmin()
+		));
+
+		$this->setData($results[0]);
+
+	}
+
+	 //Fim: Método update():
+
+	 //Inicio: Método delete():
+
+	public function delete()
+	{
+
+
+		$sql = new Sql();
+
+		$sql->query("CALL sp_users_delete(:iduser)",array(
+			":iduser"=>$this->getiduser()
+		));
+
+
+	}
+
+	 //Fim: Método delete():
+
 }
 
 
