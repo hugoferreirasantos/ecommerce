@@ -76,7 +76,7 @@ class User extends Model {
 			||
 			!$_SESSION[User::SESSION]["iduser"] > 0
 			||
-			(bool)$_SESSION[User::SESSION]["iduser"] !== $inadmin
+			(bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin
 		) {
 
 			header("Location: /admin/login");

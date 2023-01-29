@@ -32,6 +32,19 @@ class Model {
 
 	}
 
+	//Inicio: Método setData:
+	public function setData($data = array())
+	{
+
+		foreach($data as $key => $value){
+
+			$this->{"set".$key}($value);
+
+		}
+
+	}
+	 //Fim: Método setData:
+
 	public function getValues()
 	{
 
