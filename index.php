@@ -189,6 +189,98 @@ $app->post("/admin/users/:iduser", function($iduser){
 
  //fim: CRUD
 
+//Rota de esqueci a senha:
+$app->get('/admin/forgot',function(){
+
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+
+	$page->setTpl("forgot");
+
+
+});
+
+//Rota para pegar as informações do arquivo forgot.html
+$app->post('/admin/forgot',function(){
+
+	
+	$user = User::getForgot($_POST["email"]);
+
+	//Depois mandar o usuário para uma rota:
+	header("Location: /admin/forgot/send");
+	exit;
+
+});
+
+//Rota de envio de email:
+$app->get('/admin/forgot/send', function(){
+
+
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+
+	$page->setTpl("forgot-sent");
+
+
+});
+
+ //Inicio: Rota para redefinir a senha:
+$app->get('/admin/forgot/reset',function(){
+
+	//Processo de validação do usuário:
+	$user = User::validForgotDecrypt($_GET["code"]);
+
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+
+
+	$page->setTpl("forgot-reset",array(
+		"name"=>$user["desperson"],
+		"code"=>$_GET["code"]
+	));
+
+
+
+});
+
+$app->post('/admin/forgot/reset', function(){
+
+	$forgot = User::validForgotDecrypt($_POST["code"]);
+
+	//Método de falar que esse processo de recuperação já foi usado:
+	User::setForgotUsed($forgot["idrecovery"]);
+
+	$user = new User();
+
+	$user->get((int)$forgot["iduser"]);
+
+	//Criptografar a senha para inseri-la no banco:
+	$password = password_hash($_POST["password"], PASSWORD_DEFAULT, [
+		"cost"=>12
+	]);
+
+	$user->setPassword($password);
+
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+
+
+	$page->setTpl("forgot-reset-success");
+
+
+
+});
+
+ //Fim: Rota para redefinir a senha:
+
 
 $app->run();
 
