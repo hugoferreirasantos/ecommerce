@@ -40,7 +40,6 @@
     Copyright &copy; 2014-2016 <b><a href="http://almsaeedstudio.com" class="text-black">Almsaeed Studio</a></b><br>
     All rights reserved
   </div>
-  <p><?php echo htmlspecialchars( $echo, ENT_COMPAT, 'UTF-8', FALSE ); ?></p>
 </div>
 <!-- /.center -->
 
