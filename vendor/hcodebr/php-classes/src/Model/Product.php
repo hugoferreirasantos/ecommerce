@@ -25,6 +25,25 @@ class Product extends Model {
 	}
 	 //Fim:: Método listAll():
 
+	//Inicio: Método checkList():
+	public static function checkList($list)
+	{
+
+		foreach($list as &$row){
+			$p = new Product();
+			$p->setData($row);
+			$row = $p->getValues();
+
+		}
+
+		return $list;
+
+	}
+	//Fim: Método checkList():
+
+	
+
+
 	//Inicio: Método Save();
 	public function save()
 	{
@@ -94,7 +113,7 @@ class Product extends Model {
 			$this->getidproduct() . ".jpg"
 		)){
 
-			$url =  "/res/site/img/products/ ". $this->getidproduct() . ".jpg";
+			$url =  "/res/site/img/products/". $this->getidproduct() . ".jpg";
 		}else{
 
 			$url =  "/res/site/img/products.jpg";
