@@ -21,6 +21,60 @@ class User extends Model {
 
 	//Métodos:
 
+	 //Inicio: Método getFromSession:
+	public static function getFromSession()
+	{
+
+		$user = new User();
+
+		//Verificar se a sessão já esta definida:
+		if(isset($_SESSION[User::SESSION]) && (int)$_SESSION[User::SESSION]['iduser'] > 0){
+
+			$user->setData($_SESSION[User::SESSION]);
+
+		}	
+
+		return $user;	
+
+	}
+	 //Fim: Método getFromSession:
+
+	 //Inicio: Método checkLogin:
+	public static function checkLogin($inadmin = true)
+	{
+
+		if(
+			!isset($_SESSION[User::SESSION])
+			|| 
+			!$_SESSION[User::SESSION]
+			||
+			!$_SESSION[User::SESSION]["iduser"] > 0
+		){
+			//Não esta logado:
+			return false;
+		}else{
+
+			//É permitido acessar partes do admin do site ou seja o adminstrador:
+			if($inadmin === true && (bool)$_SESSION[User::SESSION]["iduser"] === true ){
+
+				return true;
+
+			}else if($inadmin === false){
+
+				return true;
+
+			}else{
+
+				return false;
+			}
+
+		}
+
+	}
+	 //Fim: Método checkLogin:
+
+
+
 	 //Inicio: Método login:
 	public static function login($login, $password)
 	{
@@ -76,15 +130,7 @@ class User extends Model {
 	public static function verifyLogin($inadmin = true)
 	{
 
-		if(
-			!isset($_SESSION[User::SESSION])
-			|| 
-			!$_SESSION[User::SESSION]
-			||
-			!$_SESSION[User::SESSION]["iduser"] > 0
-			||
-			(bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin
-		) {
+		if(User::checkLogin($inadmin)) {
 
 			header("Location: /admin/login");
 			exit;

@@ -4,6 +4,7 @@
 use \Hcode\Page;
 use \Hcode\Model\Product;
 use \Hcode\Model\Category;
+use \Hcode\Model\Cart;
 
 
 $app->get('/', function() {
@@ -50,6 +51,7 @@ $app->get('/categories/:idcategory',function($idcategory){
 
 });
 
+//Rota da captura de um produto via url:
 $app->get('/products/:desurl', function($desurl){
 
 	$product  = new Product();
@@ -64,6 +66,19 @@ $app->get('/products/:desurl', function($desurl){
 	]);
 
 });
+
+//Rota do carrinho de compras:
+$app->get('/cart', function(){
+
+	$cart = Cart::getFromSession();
+
+	$page = new Page();
+
+	$page->setTpl("cart");
+
+});
+
+
 
 
 
